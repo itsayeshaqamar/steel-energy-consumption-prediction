@@ -1,10 +1,11 @@
-# Steel Industry Energy Consumption Prediction
+<img width="212" height="212" alt="logo" src="https://github.com/user-attachments/assets/e9b2db24-18ac-4eaf-83ee-58253fec7f5c" />
+# Steel Industry Energy Consumption Prediction 
 
-## Project Overview
+## Week 2 Task Overview
 
-This project focuses on analyzing and predicting energy consumption in a steel manufacturing industry using machine learning. The objective is to understand the factors affecting electricity usage, engineer meaningful features, perform exploratory data analysis (EDA), and build baseline regression models capable of accurately predicting energy consumption.
+This task focuses on analyzing and predicting energy consumption in a steel manufacturing industry using machine learning. The objective is to understand the factors affecting electricity usage, engineer meaningful features, perform exploratory data analysis (EDA), and build baseline regression models capable of accurately predicting energy consumption.
 
-The project is divided into two main stages:
+The task is divided into two main stages:
 
 - **Part 1:** Exploratory Data Analysis (EDA) and Feature Engineering
 - **Part 2:** Baseline Machine Learning Models
@@ -261,7 +262,8 @@ Include screenshots of the following outputs in the repository (recommended):
 ```
 ├── week2_eda.ipynb
 ├── week2_baseline_models.ipynb
-├── steel_energy_engineered.csv
+├── data/steel_energy_engineered.csv
+ ├── data/steel_industry_data.csv
 ├── requirements.txt
 └── README.md
 ```
@@ -272,4 +274,4 @@ Include screenshots of the following outputs in the repository (recommended):
 
 **Ayesha Qamar**
 
-AI Engineer Intern
+AI/Ml Intern at IT Simplera Institute
