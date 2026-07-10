@@ -118,24 +118,47 @@ Created a binary feature using the 75th percentile of energy consumption.
 
 ---
 
+
 # Exploratory Data Analysis (EDA) Findings
 
-The Exploratory Data Analysis (EDA) phase was carried out to gain a comprehensive understanding of the Steel Industry Energy Consumption dataset before developing any machine learning models. The primary objective of this stage was to examine the dataset's structure, evaluate data quality, discover hidden patterns, understand relationships among variables, and identify the features that have the greatest influence on electricity consumption.
+The Exploratory Data Analysis (EDA) phase was conducted to understand the dataset, evaluate data quality, discover important patterns, and identify the factors influencing energy consumption before building machine learning models.
 
-The analysis began by loading the dataset and reviewing its overall structure using the dataset dimensions, data types, summary statistics, and sample records. The dataset consists of **35,040 observations** collected at **15-minute intervals** throughout the year **2018**, providing detailed operational information about energy consumption in a steel manufacturing plant. The inspection confirmed that the dataset contains **11 original features**, representing electrical measurements, time-related information, and plant operating conditions.
+### Dataset Understanding
 
-Data quality checks were then performed to ensure that the dataset was reliable for further analysis. The original dataset contained **no missing values**, indicating that the collected measurements were complete. During feature engineering, a single missing value appeared in the newly created **Power_Factor_Ratio** feature because one record contained a lagging power factor of zero, making division mathematically undefined. This missing value represented only one observation out of more than thirty-five thousand records and therefore had a negligible impact on the overall analysis.
+- Analyzed **35,040 records** collected at **15-minute intervals** throughout 2018.
+- Examined dataset structure, data types, dimensions, and summary statistics.
+- Verified that the dataset contained **11 original features** related to electrical measurements, operating conditions, and time information.
 
-To provide additional information for analysis and model training, several new features were engineered from the original dataset. The **date** column was converted into a datetime format, allowing the extraction of meaningful temporal features such as **Hour**, **Day of Week**, **Month**, and **Day Type (Weekday/Weekend)**. These features were created to capture daily and seasonal patterns in electricity consumption. Another engineered feature, **Power_Factor_Ratio**, was introduced to represent the relationship between the leading and lagging power factors, providing a more informative measure than the individual variables alone. In addition, a binary **High_Load** feature was created using the 75th percentile of energy consumption to distinguish periods of unusually high electricity demand.
+### Data Quality Assessment
 
-Outlier analysis was performed using the **Interquartile Range (IQR)** method on the target variable (**Usage_kWh**). The analysis identified **328 outliers**, representing approximately **0.94%** of the entire dataset. These observations correspond to periods of exceptionally high energy consumption rather than data entry errors or measurement issues. Since they reflect genuine plant operating conditions, the outliers were intentionally retained to ensure that the machine learning models learn to predict both normal and peak energy usage.
+- Confirmed that the original dataset contained **no missing values**.
+- One missing value appeared in the engineered **Power_Factor_Ratio** feature due to division by zero (lagging power factor = 0).
+- The missing value affected only one record and had a negligible impact on the analysis.
 
+### Feature Engineering
+
+The following features were created to provide additional information for analysis and model training:
+
+- **Hour** – Captures hourly energy consumption patterns.
+- **Day_of_Week_Name** – Identifies the weekday of each observation.
+- **Month** – Enables monthly trend analysis.
+- **Day_Type** – Classifies records as Weekday or Weekend.
+- **Power_Factor_Ratio** – Represents the relationship between leading and lagging power factors.
+- **High_Load** – Binary indicator identifying observations above the 75th percentile of energy consumption.
+
+### Outlier Analysis
+
+- Applied the **Interquartile Range (IQR)** method on **Usage_kWh**.
+- Detected **328 outliers (0.94%)**.
+- These observations were retained because they represent genuine high-energy operating conditions rather than data errors.
+  
 <img width="1075" height="580" alt="Screenshot (4161)" src="https://github.com/user-attachments/assets/ace0c999-2309-4e2c-beef-6033de499721" />
 
-
+### Key Findings
 A correlation analysis was then conducted to measure the strength of the relationship between numerical features and the target variable. The resulting correlation heatmap revealed that **CO₂ emissions** have the strongest positive correlation with energy consumption (**0.988**), followed by **Lagging Current Reactive Power** (**0.896**) and **Lagging Current Power Factor** (**0.386**). These results indicate that as the plant consumes more electricity, CO₂ emissions and reactive power also increase significantly, making these variables valuable predictors for the regression models.
 <img width="1392" height="772" alt="Screenshot (4162)" src="https://github.com/user-attachments/assets/22d7fde6-8ddc-41b5-8210-2e0c4ee33b76" />
 
+### Visual Insights
 
 The relationship between plant operating conditions and electricity consumption was further explored by analyzing the average energy usage for each **Load Type**. The grouped bar chart showed a clear increase in electricity consumption from **Light Load** to **Medium Load**, with the highest average energy usage observed during **Maximum Load** operations. This confirms that the operational load of the plant has a direct impact on electricity demand.
 <img width="1444" height="587" alt="Screenshot (4157)" src="https://github.com/user-attachments/assets/088f1393-de89-4d39-8629-f74b8b911027" />
@@ -144,30 +167,48 @@ The relationship between plant operating conditions and electricity consumption 
 Finally, the hourly energy consumption trend was examined using a line chart. The analysis demonstrated that electricity usage follows a consistent daily pattern, with consumption gradually increasing during working hours, reaching its highest average level around **9:00 AM**, and then decreasing during the evening and overnight periods. This behavior aligns with the expected production schedule of an industrial manufacturing facility.
 <img width="1327" height="599" alt="Screenshot (4158)" src="https://github.com/user-attachments/assets/a1f07e79-708b-47d0-be11-3e84d1c86d9a" />
 
-Overall, the EDA phase provided valuable insights into the dataset, confirmed that the data was of high quality, highlighted the variables most strongly associated with electricity consumption, and established a solid foundation for feature selection and predictive modeling.
+
+Overall, the EDA phase provided a clear understanding of the dataset, identified the most influential features, and established a strong foundation for machine learning.
 
 # Model Training Process
 
-After completing the exploratory analysis and feature engineering, the dataset was prepared for machine learning by applying a series of preprocessing steps. The objective of this stage was to transform the engineered dataset into a format suitable for regression algorithms while ensuring that the evaluation remained fair and free from data leakage.
+After completing feature engineering, the dataset was prepared for regression modeling through a series of preprocessing steps to ensure fair and reliable model evaluation.
 
-The first preprocessing step involved removing unnecessary and redundant features. The original **date** column was excluded because its information had already been represented through the engineered temporal features such as Hour, Month, and Day Type. The engineered **High_Load** feature was also removed because it was directly derived from the target variable (**Usage_kWh**) and would introduce target leakage if included during training. Additionally, duplicate categorical columns representing the same information were removed to avoid redundancy.
+### Data Preprocessing
 
-Machine learning algorithms require numerical input features; therefore, categorical variables such as **Load Type**, **Day of Week**, **Month**, and **Day Type** were transformed using **One-Hot Encoding**. This preprocessing technique converts each category into separate binary variables while preserving all available information without introducing artificial numerical relationships between categories.
+The following preprocessing steps were performed:
 
-The target variable for prediction was defined as **Usage_kWh**, while all remaining engineered features served as input variables. The dataset was then divided into **80% training data** and **20% testing data** using a fixed **random_state = 42** to ensure that the results could be reproduced consistently.
+- Removed the **date** column after extracting all useful time-based features.
+- Removed **High_Load** to prevent target leakage since it was derived from the target variable.
+- Removed duplicate categorical features (**WeekStatus** and **Day_of_week**) because equivalent engineered features already existed.
+- Applied **One-Hot Encoding** to convert categorical variables into numerical format.
 
-Four commonly used regression algorithms were selected to establish baseline performance:
+### Model Preparation
+
+- **Target Variable:** `Usage_kWh`
+- **Input Features:** All remaining engineered features
+- **Train-Test Split:** 80% Training, 20% Testing
+- **Random State:** 42 (for reproducibility)
+
+### Regression Models
+
+Four baseline regression models were trained:
 
 - Linear Regression
 - Ridge Regression
 - Decision Tree Regressor
 - Random Forest Regressor
 
-Each model was trained using the same training dataset to provide a fair comparison. The models represent both traditional linear approaches and more advanced tree-based ensemble methods, allowing the strengths and limitations of different regression techniques to be evaluated.
+### Evaluation Metrics
 
-Model performance was assessed using three complementary evaluation metrics. **Mean Absolute Error (MAE)** measured the average prediction error, **Root Mean Squared Error (RMSE)** measured the magnitude of prediction errors while placing greater emphasis on larger mistakes, and the **R² Score** measured how well each model explained the variation in energy consumption.
+Each model was evaluated using:
 
-To further evaluate the robustness of each model, **5-Fold Cross Validation** was performed. This technique repeatedly divides the dataset into different training and validation subsets, producing a more reliable estimate of how well each model is expected to perform on unseen data. Using cross-validation reduces the likelihood of selecting a model that performs well only because of a favorable train-test split.
+- **MAE (Mean Absolute Error)** – Measures average prediction error.
+- **RMSE (Root Mean Squared Error)** – Penalizes larger prediction errors.
+- **R² Score** – Measures how well the model explains the variation in energy consumption.
+- **5-Fold Cross Validation** – Evaluates model consistency and generalization on unseen data.
+
+This process ensured a fair comparison between all regression models using the same training and testing data.
 
 ---
 
