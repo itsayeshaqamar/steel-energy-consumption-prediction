@@ -1,7 +1,30 @@
-numpy>=1.24.0
+# ============================================================
+# Steel Industry Energy Consumption Prediction - Requirements
+# Week 2 Internship Task
+# ============================================================
+
+# --------------------------
+# Data Manipulation
+# --------------------------
 pandas>=2.0.0
+numpy>=1.24.0
+
+# --------------------------
+# Data Visualization
+# --------------------------
 matplotlib>=3.7.0
+
+# --------------------------
+# Machine Learning
+# (Used for train-test split, preprocessing,
+# regression models, evaluation metrics,
+# and cross-validation)
+# --------------------------
 scikit-learn>=1.3.0
+
+# --------------------------
+# Jupyter Notebook Environment
+# --------------------------
 jupyter>=1.0.0
 notebook>=7.0.0
 ipykernel>=6.0.0
